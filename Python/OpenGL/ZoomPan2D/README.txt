@@ -8,4 +8,4 @@ ZOOM
 - Tenere premuto il tasto centrale del mouse e il tasto CTRL della tastiera, muovere avanti e indietro il mouse
 
 PAN
-- Tenere premuto il tasto centrale del mouse e il tasto SHIFT della tastiera, muove il mouse avanti-indietro-destra-sinistra
+- Tenere premuto il tasto centrale del mouse e il tasto SHIFT della tastiera, muovere il mouse avanti-indietro-destra-sinistra
