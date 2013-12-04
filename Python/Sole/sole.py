@@ -5,15 +5,15 @@ sunRadius = 696000
 
 # Angoli sessadecimali
 def sin(a):
-	a = (a * 180) / math.pi
+	a = (a * math.pi) / 180
 	return(math.sin(a))
 	
 def cos(a):
-	a = (a * 180) / math.pi
+	a = (a * math.pi) / 180
 	return(math.cos(a))
 
 def tan(a):
-	a = (a * 180) / math.pi
+	a = (a * math.pi) / 180
 	return(math.tan(a))	
 	
 def asin(v):
@@ -22,7 +22,7 @@ def asin(v):
 	
 	return(result)
 
-def acos(a):
+def acos(v):
 	result = math.acos(v)
 	result = (result * 180) / math.pi
 	
@@ -30,7 +30,7 @@ def acos(a):
 
 
 
-def atan(a):
+def atan(v):
 	result = math.atan(v)
 	result = (result * 180) / math.pi
 	
@@ -79,10 +79,10 @@ def getEclipticCoordinates(day, month, year, hours=12, minutes=0, seconds=0):
 	n = JD - 2451545.0
 	
 	# Longitudine media del sole, corretta dall'abberrazione della luce
-	L = normalize(280.460 + 0.9856475*n) # Gradi
+	L = normalize(280.460 + 0.9856474*n) # Gradi
 	
 	# Anomalia media del sole
-	g = normalize(357.528 + 0.856003*n) # Gradi
+	g = normalize(357.528 + 0.9856003*n) # Gradi
 	
 	# Longitudine ecliptica
 	lambd = L + 1.915*sin(g) + 0.020*sin(2*g)
@@ -95,6 +95,21 @@ def getEclipticCoordinates(day, month, year, hours=12, minutes=0, seconds=0):
 	
 	return (lambd, beta, R, n)
 	
+def getQuadrant(v):
+	v = normalize(v)
+	
+	if v < 180:
+		if v < 90:
+			return 1
+		else:
+			return 2
+
+	else:
+		if v < 270:
+			return 3
+		else:
+			return 4
+			
 def getPolarEquatorialCoordinates(day, month, year, hours=12, minutes=0, seconds=0):
 	eclipticCoordinates = getEclipticCoordinates(day, month, year, hours, minutes, seconds)
 			
@@ -107,6 +122,9 @@ def getPolarEquatorialCoordinates(day, month, year, hours=12, minutes=0, seconds
 	
 	# Ascensione destra
 	alpha = atan(cos(epsilon) * tan(lambd))
+	
+	if getQuadrant(lambd) != getQuadrant(alpha):
+		alpha = 180 + alpha
 	
 	# Declinazione
 	sigma = asin(sin(epsilon) * sin(lambd))
@@ -124,11 +142,16 @@ def getHorizontalCoordinate(latitude, longitude, day, month, year, hours, minute
 	# Angolo Orario
 	h = GST - longitude - alpha
 	
-	# Valutare se A o 180° + A
-	A = atan(sin(h) / (cos(h)*sin(latitude) - tan(sigma)*cos(latitude))
-	
-	# Valutare se a o 180 - a
+	# Valutare se a o 180 - a (Alzo)
 	a = asin(sin(latitude)*sin(sigma) + cos(latitude)*cos(sigma)*cos(h))
+	
+	# Valutare se A o 180 gradi + A (Azimuth)
+	A = atan(sin(h) / (cos(h)*sin(latitude) - tan(sigma)*cos(latitude)))
+	
+	
+	
+	return (a, A)
+
 
 
 def getRectangularEquatorialCoordiantes(day, month, year, hours=12, minutes=0, seconds=0):
@@ -143,6 +166,7 @@ def getRectangularEquatorialCoordiantes(day, month, year, hours=12, minutes=0, s
 	epsilon = 23.439 - 0.0000004*n # Gradi
 		
 	X = R * math.cos(lambd)
+	
 	Y = R * math.cos(epsilon) * math.sin(lambd)
 	Z = R * math.sin(epsilon) * math.sin(lambd)
 
@@ -150,3 +174,8 @@ def getRectangularEquatorialCoordiantes(day, month, year, hours=12, minutes=0, s
 
 # http://en.wikipedia.org/wiki/Position_of_the_Sun
 # GST: http://www.geoastro.de/elevaz/basics/meeus.htm
+# 44 50 59.53"N -> 44.849869 latitude
+# 10 22 5.99"E -> 10.368330 longitude
+for ore in range(7, 17):
+	for minuti in range(0, 60):
+		print ore, " ", minuti, " ", getHorizontalCoordinate(44.849869, 10.368330, 04, 12, 2013, ore, minuti, 00)
