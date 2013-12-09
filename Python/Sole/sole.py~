@@ -3,6 +3,18 @@ import datetime, math
 earthRadius = 6378.388  # Raggio equatoriale
 sunRadius = 696000
 
+"""
+L'atmosfera, rifrange i raggi solari, per questo motivo, il sole sorge
+prima di quanto non farebbe in assenza di atmosfera e tramonta dopo di
+quanto non farebbe in assenza di atmosfera. Per convenzione, si definisce
+alba il momento in cui il lembo superiore del sole appare all'orizzonte
+e tramonto quando scompare. Questo accade quando il sole si trova 51.4 
+secondi sotto l'orizzonte, ossia quando il parametro "a" (l'alzo) vale
+-0.857 gradi (questo valore tiene conto sia della rifrazione che del 
+semi-diametro del disco solare).
+"""
+
+
 # Angoli sessadecimali
 def sin(a):
 	a = (a * math.pi) / 180
@@ -70,6 +82,16 @@ def getGST(day, month, year, hours, minutes, seconds):
 	return theta0
 
 """
+# Calcola l'obliquita' della terra con una buona precisione
+def getEpsilon(day, month, year, hours, minutes, seconds):
+	JD = toJulianDate(day, month, year, hours, minutes, seconds)
+	
+	T = (JD - 2451545.0) / 36525.0
+
+	epsilon = 23.4522944 - 0.0130125 * T - 0.0000016 * T**2 + 0.000005 * T**3
+	return epsilon
+
+
 def getGST(day, month, year, hours, minutes, seconds):
 	JD = toJulianDate(day, month, year, hours, minutes, seconds)
 	D = JD - toJulianDate(01, 01, 2000, 12)
@@ -144,7 +166,8 @@ def getPolarEquatorialCoordinates(day, month, year, hours=12, minutes=0, seconds
 	R = eclipticCoordinates[2]
 	n = eclipticCoordinates[3]
 	
-	epsilon = 23.439 - 0.0000004*n # Gradi
+	#epsilon = 23.439 - 0.0000004*n # Gradi
+	epsilon = getEpsilon(day, month, year, hours, minutes, seconds)
 	
 	# Ascensione destra
 	alpha = atan(cos(epsilon) * tan(lambd))
@@ -191,7 +214,8 @@ def getRectangularEquatorialCoordiantes(day, month, year, hours=12, minutes=0, s
 	R = equatorialCoordinates[2]
 	n = equatorialCoordinates[3]
 	
-	epsilon = 23.439 - 0.0000004*n # Gradi
+	#epsilon = 23.439 - 0.0000004*n # Gradi
+	epsilon = getEpsilon(day, month, year, hours, minutes, seconds)
 		
 	X = R * math.cos(lambd)
 	
@@ -206,11 +230,16 @@ f = open("./importa.csv", "w")
 # GST: http://www.geoastro.de/elevaz/basics/meeus.htm
 # 44 50 59.53"N -> 44.849869 latitude
 # 10 22 5.99"E -> 10.368330 longitude
+# Milano
+# 45 27 49.28 N -> 45.4636111
+# 9 11 18.99 E -> 9.1883333
 for ore in range(6, 18):
 	for minuti in range(0, 60):
-		c = getHorizontalCoordinate(44.849869, 360-(10.368330), 06, 12, 2013, ore, minuti, 00)
-		s = "%f, %f\n"%c
-		
+		c = getHorizontalCoordinate(45.5 , 360-(9.2), 9, 12, 2013, ore, minuti, 00)
+		s = "%f; %f"%c
+		o = "%d.%d"%(ore, minuti)	
+		print o+ " " +s
+
 		f.write(s)
 		
 f.close()		
