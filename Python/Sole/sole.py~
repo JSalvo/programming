@@ -209,7 +209,7 @@ f = open("./importa.csv", "w")
 for ore in range(6, 18):
 	for minuti in range(0, 60):
 		c = getHorizontalCoordinate(44.849869, 360-(10.368330), 06, 12, 2013, ore, minuti, 00)
-		s = "%f; %f\n"%c
+		s = "%f, %f\n"%c
 		
 		f.write(s)
 		
