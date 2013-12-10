@@ -12,6 +12,9 @@ e tramonto quando scompare. Questo accade quando il sole si trova 51.4
 secondi sotto l'orizzonte, ossia quando il parametro "a" (l'alzo) vale
 -0.857 gradi (questo valore tiene conto sia della rifrazione che del 
 semi-diametro del disco solare).
+
+L'angolo apparente del semidiametro del disco solare e' di circa 16'
+
 """
 
 
@@ -27,6 +30,9 @@ def cos(a):
 def tan(a):
 	a = (a * math.pi) / 180
 	return(math.tan(a))	
+	
+def cotan(a):
+	return(1.0/tan(a))	
 	
 def asin(v):
 	result = math.asin(v)
@@ -47,6 +53,18 @@ def atan(v):
 	result = (result * 180) / math.pi
 	
 	return(result)
+	
+
+# Fornita l'altitudiene del sole (espressa in gradi), produce l'angolo di rifrazione	
+def getRefraction(h):
+	result = 1.02 * cotan(h + 10.3/(h+5.11))
+	result = (result * 60) / 3600.0
+	return result
+	
+def getRefractionA(h):
+	result = cotan(h + 7.31/(h+4.4))
+	result = (result * 60) / 3600.0
+	return result
 	
 def timeToAngle(hours, minutes, seconds):
 	g = hours * 15
@@ -182,13 +200,13 @@ def getPolarEquatorialCoordinates(day, month, year, hours=12, minutes=0, seconds
 	
 
 	
-def getHorizontalCoordinate(latitude, longitude, day, month, year, hours, minutes, seconds):
+def getHorizontalCoordinate(latitude, longitude, day, month, year, hours, minutes, seconds, timeZone=+1, refraction=True):
 	pc = getPolarEquatorialCoordinates(day, month, year, hours, minutes, seconds)
 	
 	alpha = pc[0]
 	sigma = pc[1]
 	
-	GST = getGST(day, month, year, hours, minutes, seconds)
+	GST = getGST(day, month, year, hours-timeZone, minutes, seconds)
 	
 	# Angolo Orario
 	h = GST - longitude - alpha
@@ -197,9 +215,13 @@ def getHorizontalCoordinate(latitude, longitude, day, month, year, hours, minute
 	a = asin(sin(latitude)*sin(sigma) + cos(latitude)*cos(sigma)*cos(h))
 	
 	# Valutare se A o 180 gradi + A (Azimuth)
-	A = atan(sin(h) / (cos(h)*sin(latitude) - tan(sigma)*cos(latitude)))
+	A = atan(sin(h) / (cos(h)*sin(latitude) - tan(sigma)*cos(latitude)))	
 	
+	if (refraction):
+		c = getRefraction(a)
+		a = a+c
 	
+	a = a + 0.2666666666
 	
 	return (a, A)
 
@@ -235,7 +257,7 @@ f = open("./importa.csv", "w")
 # 9 11 18.99 E -> 9.1883333
 for ore in range(6, 18):
 	for minuti in range(0, 60):
-		c = getHorizontalCoordinate(45.5 , 360-(9.2), 9, 12, 2013, ore, minuti, 00)
+		c = getHorizontalCoordinate(44.849869 , 360-(10.368330), 29, 11, 2013, ore, minuti, 00)
 		s = "%f; %f"%c
 		o = "%d.%d"%(ore, minuti)	
 		print o+ " " +s
