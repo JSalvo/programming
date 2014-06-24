@@ -9,9 +9,6 @@
 # INSTALLARE python-tk
 
 
-
-
-
 import sys
 
 import PyQt4
@@ -22,13 +19,16 @@ from PyQt4.QtGui import QWidget, QHBoxLayout, QColor
 
 from PyQt4.QtOpenGL import QGLWidget
 
-from OpenGL.GL import *
+from OpenGL import GL, GLU, GLUT
 
-from OpenGL import GLUT
+
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
 
 import math
 
-
+import lib.Vectorial
 
 
 
@@ -103,6 +103,34 @@ def ico(resolution):
 
 
 
+def assi():
+	glBegin(GL_LINES)
+	
+	
+	glColor3f(0, 1, 1)
+	glVertex3f(0,0,0)
+	glVertex3f(200, 0, 0)	
+	
+	
+	glEnd()
+	
+	glBegin(GL_LINES)
+	glColor3f(1, 0, 0)
+	glVertex3f(0,0,0)
+	glVertex3f(0, 200, 0)
+	glEnd()
+	
+	
+	glBegin(GL_LINES)
+	glColor3f(0, 0, 1)
+	glVertex3f(0,0,0)
+	glVertex3f(0, 0, 200)
+	glEnd()
+	
+	
+	
+
+
 
 class GLWidget(QGLWidget):
 
@@ -111,13 +139,18 @@ class GLWidget(QGLWidget):
 		# Inizializza Antenato
 
 		QGLWidget.__init__(self, parent)
-
-
-		
+		self.xyRotation = 0.0
+		self.zoom = 1.0
+	
+	def addXYrotation(self, v):
+		self.xyRotation = self.xyRotation + v
+	
+	def addZoom(self, v):
+		self.zoom = self.zoom + v/1000.0
 	
 	def initializeGL(self):
 
-		GLUT.glutInit([], [])
+		#GLUT.glutInit([], [])
 	
 
 		black = QColor(0,0,0)
@@ -128,13 +161,21 @@ class GLWidget(QGLWidget):
 
 		glViewport(0, 0, self.width(), self.height())
 		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		
+		
 		glMatrixMode(GL_PROJECTION)
 
 		glLoadIdentity()
 
-		#glOrtho(0.0, self.width(), 0.0, self.height(), -1.0, 80)
-		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 200)
-		#glFrustum(-30, 30, -30, 30, 20, 120)
+		
+		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
+		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+	
+		glRotatef(self.xyRotation, 0, 0, 1)
+	
+	
+	#	glScalef(self.zoom, self.zoom, self.zoom)
+		
 	def paintGL(self):
 		glClear(GL_COLOR_BUFFER_BIT);
 		glColor3f(1.0, 1.0, 0.0)
@@ -143,11 +184,13 @@ class GLWidget(QGLWidget):
 		glLoadIdentity()
 		
 		
-		glTranslatef(0, 0, -60)
+		glTranslatef(0, -60, 0)
 		glScalef(50, 50, 50)
 		
-		ico(3)
 		
+		
+		#ico(0)
+		assi()
 		
 		
 		
@@ -160,6 +203,21 @@ class GLWidget(QGLWidget):
 		
 		glEnd()"""
 		
+		glMatrixMode(GL_PROJECTION)
+		glLoadIdentity()
+		
+		
+		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
+		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+	
+		glTranslatef(0, -60, 0)
+		glRotatef(self.xyRotation, 0, 0, 1)
+		glTranslatef(0, 60, 0)
+	
+	#	glScalef(self.zoom, self.zoom, self.zoom)
+		
+		
+		
 		
 		glFlush()
 
@@ -169,8 +227,16 @@ class GLWidget(QGLWidget):
 		glLoadIdentity()
 		#glOrtho(0.0, self.width(), 0.0, self.height(), -1.0, 80)
 		#glFrustum(-30, 30, -30, 30, 20, 120)
-		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 120)
-		gluLookAt()
+		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
+		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+		
+		
+		glRotatef(self.xyRotation, 0, 0, 1)
+		
+		
+		
+	#	glScalef(self.zoom, self.zoom, self.zoom)
+		
 
 
 class Window(QWidget):
@@ -181,13 +247,13 @@ class Window(QWidget):
 		QWidget.__init__(self, parent)
 
 		# Creo widget che visualizza opengl <---------------------
-		glWidget = GLWidget(None)
+		self.glWidget = GLWidget(None)
 
 		# Creo un layour orizzontale
 		mainLayout = QHBoxLayout()
 
 		# Aggiungo la widget per opengl al layout
-		mainLayout.addWidget(glWidget)
+		mainLayout.addWidget(self.glWidget)
 
 		# Imposto il layout per questo (self) oggetto
 		self.setLayout(mainLayout)
@@ -195,24 +261,48 @@ class Window(QWidget):
 		self.setMinimumWidth(300)
 
 		self.setMinimumHeight(300)
+		self.previousX = 0;
 
 	def keyPressEvent(self, e):
+		"""
+		Key_Left
+		Key_PageUp
+		Key_Shift		
+		
+		"""
+		
 		if e.key() == QtCore.Qt.Key_Q:
 			print "Q"
-
-
-
+	def mousePressEvent(self, e):
+		"""
+		LeftButton
+		MiddleButton
+		
+		"""
+		print e.x(), " ", e.y()
+		e.ignore()
+	def mouseMoveEvent(self, e):
+		print e.x(), " ", e.y()
+		
+		self.glWidget.addXYrotation(e.x() - self.previousX)
+		self.glWidget.glDraw()
+		
+		self.previousX = e.x()
+		
+		e.ignore()
+	def mouseReleaseEvent(self, e):
+		print e.x(), " ", e.y()
+		e.ignore()
+	def wheelEvent(self, e):
+		self.glWidget.addZoom(e.delta())
+		self.glWidget.glDraw()
+		print e.delta()
+		e.ignore()
 
 app = QtGui.QApplication(sys.argv)
 
-
 window = Window(None)
 
-
-
 window.show()
-
-
-
 
 sys.exit(app.exec_())
