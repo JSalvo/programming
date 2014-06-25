@@ -1,5 +1,23 @@
 import math
 
+
+def decimalToArc(v):
+	# x: math.pi = v : 180
+	
+	return (math.pi * v ) / 180.0
+
+def sexagesimalToDecimal(a, b, c):
+	#b : 60 = x : 100
+	#c : 3600 = y : 10000
+	
+	return (a + b / 60.0 + c / 3600.0)
+
+def sexagesimalToArc(a, b, c):
+	x = sexagesimalDegreeToDecimalDegree(a, b, c)
+	
+	return decimalDegreeToArcDegree(x)
+	
+
 class Point3d:
 	def __init__(self, v=None):
 		self.__v = Vector(4)
@@ -26,9 +44,23 @@ class Point3d:
 	def to3x1Matrix(self):
 		pass
 	def to1x4Matrix(self):
-		pass
+		result = Matrix(1,4)
+		result[0][0] = self.__v[0]
+		result[0][1] = self.__v[1] 
+		result[0][2] = self.__v[2] 
+		result[0][3] = self.__v[3] 
+		
+		return result
+		
+		
 	def to4x1Matrix(self):
-		pass
+		result = Matrix(4,1)
+		result[0][0] = self.__v[0]
+		result[1][0] = self.__v[1] 
+		result[2][0] = self.__v[2] 
+		result[3][0] = self.__v[3] 
+		
+		return result
 	def __repr__(self):
 		result = "x=%f, y=%f, z=%f"%(self[0], self[1], self[2])
 		return result
@@ -168,6 +200,77 @@ class Matrix():
 		return self.__m.__repr__()
 				
 
+class Matrix3d(Matrix):
+	def __init__(self):
+		Matrix(self, 3, 3)
+	def getIdentity(self):
+		self[0][0] = 1.0
+		self[1][1] = 1.0
+		self[2][2] = 1.0
+	
+	
+class Matrix4d(Matrix):
+	def __init__(self):
+		Matrix.__init__(self, 4, 4)
+	def getIdentity(self):
+		self[0][0] = 1.0
+		self[1][1] = 1.0
+		self[2][2] = 1.0
+		self[3][3] = 1.0
+
+def get4x4Identity():
+	result = Matrix4d()
+	
+	result[0][0] = 1.0
+	result[1][1] = 1.0
+	result[2][2] = 1.0
+	result[3][3] = 1.0
+	
+	return result
+
+def get4x4RotationAroundX(angle):
+	angle = decimalToArc(angle)
+	
+	result = get4x4Identity()
+	
+	result[1][1] = +math.cos(angle) 
+	result[1][2] = +math.sin(angle) 
+	result[2][1] = -math.sin(angle) 
+	result[2][2] = +math.cos(angle)
+	
+	return result
+	
+def get4x4RotationAroundY(angle):
+	angle = decimalToArc(angle)
+	
+	result = get4x4Identity()
+	
+	result[0][0] = +math.cos(angle) 
+	result[2][0] = +math.sin(angle) 
+	result[0][2] = -math.sin(angle) 
+	result[2][2] = +math.cos(angle)
+	
+	return result
+
+def get4x4RotationAroundZ(angle):
+	angle = decimalToArc(angle)
+	
+	result = get4x4Identity()
+	
+	result[0][0] = +math.cos(angle) 
+	result[1][0] = -math.sin(angle) 
+	result[0][1] = +math.sin(angle) 
+	result[1][1] = +math.cos(angle)
+	
+	return result
+	
+
+
+m1 = get4x4RotationAroundY(270)
+
+
+print(Point3d([0,0,1]).to1x4Matrix() * m1)
+	
 	
 """ Test 1
 v1 = Vector(3, [1,2,3])
@@ -201,9 +304,9 @@ p4 = Point3d(v3)
 
 print p4
 """
-
-m1 = Matrix(2,3)
-m2 = Matrix(3,2)
+"""
+m1 = Matrix(2,4)
+m2 = Matrix(3,5)
 
 m1[0][0] = 1
 m1[0][1] = 2
@@ -222,11 +325,11 @@ m2[0][1] = 2
 m2[1][1] = 4
 m2[2][1] = 8
 
-m = m1*m2
+#m = m1*m2
 
-print m
+#print m
 
-
+"""
 
 
 

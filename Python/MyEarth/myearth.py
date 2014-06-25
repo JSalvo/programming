@@ -31,6 +31,34 @@ import math
 import lib.Vectorial
 
 
+def gpsToCartesian(nord, est):
+	# 180 : math.pi = nord : x
+	# 180 : math.pi = est : y
+	
+	# z / 6371 = sin(x)
+	z = 6371 * math.sin((math.pi * nord) / 180.0)
+	
+	
+	# k / 6371 = cos(x)
+	k = 6371 * math.cos((math.pi * nord) / 180.0)
+	
+	# y / k = sin(y)
+	y = k * math.sin( (math.pi*est) / 180.0)
+	
+	
+	# x / k = cos(y)
+	y = k * math.cos( (math.pi*est) / 180.0)
+	
+	return (x, y, z)
+
+
+# Raggio terrestre 6371
+class Patch:
+	def __init__(self, nord, est):
+		pass
+	
+
+
 
 def sumVector(v1, v2):
 	if len(v1) == len(v2):
@@ -99,8 +127,6 @@ def ico(resolution):
 		
 		triangle([0, -1, 0], [1, 0, 0], [0,0,1], resolution)
 		triangle([0, -1, 0], [1, 0, 0], [0,0,-1], resolution)
-	
-
 
 
 def assi():
@@ -127,10 +153,6 @@ def assi():
 	glVertex3f(0, 0, 200)
 	glEnd()
 	
-	
-	
-
-
 
 class GLWidget(QGLWidget):
 
@@ -140,10 +162,14 @@ class GLWidget(QGLWidget):
 
 		QGLWidget.__init__(self, parent)
 		self.xyRotation = 0.0
+		self.rotationAroundX = 0.0
 		self.zoom = 1.0
 	
 	def addXYrotation(self, v):
 		self.xyRotation = self.xyRotation + v
+		
+	def addRotazionAroundX(self, v):
+		self.rotationAroundX = self.rotationAroundX  + v 
 	
 	def addZoom(self, v):
 		self.zoom = self.zoom + v/1000.0
@@ -169,7 +195,7 @@ class GLWidget(QGLWidget):
 
 		
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
 	
 		glRotatef(self.xyRotation, 0, 0, 1)
 	
@@ -208,7 +234,7 @@ class GLWidget(QGLWidget):
 		
 		
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
 	
 		glTranslatef(0, -60, 0)
 		glRotatef(self.xyRotation, 0, 0, 1)
@@ -228,7 +254,7 @@ class GLWidget(QGLWidget):
 		#glOrtho(0.0, self.width(), 0.0, self.height(), -1.0, 80)
 		#glFrustum(-30, 30, -30, 30, 20, 120)
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(-50, -20, 20, 0, -60, 0, 0, 0, 1)
+		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
 		
 		
 		glRotatef(self.xyRotation, 0, 0, 1)
@@ -271,8 +297,14 @@ class Window(QWidget):
 		
 		"""
 		
-		if e.key() == QtCore.Qt.Key_Q:
-			print "Q"
+		if e.key() == QtCore.Qt.Key_Left:
+			print "Left"
+		elif e.key() == QtCore.Qt.Key_Right:
+			print "Right"
+		elif e.key() == QtCore.Qt.Key_Up:
+			print "Up"
+		elif e.key() == QtCore.Qt.Key_Down:
+			print "Down"
 	def mousePressEvent(self, e):
 		"""
 		LeftButton
