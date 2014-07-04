@@ -31,6 +31,7 @@ import math
 import lib.Vectorial
 
 
+
 def gpsToCartesian(nord, est):
 	# 180 : math.pi = nord : x
 	# 180 : math.pi = est : y
@@ -57,8 +58,6 @@ class Patch:
 	def __init__(self, nord, est):
 		pass
 	
-
-
 
 def sumVector(v1, v2):
 	if len(v1) == len(v2):
@@ -135,7 +134,7 @@ def assi():
 	
 	glColor3f(0, 1, 1)
 	glVertex3f(0,0,0)
-	glVertex3f(200, 0, 0)	
+	glVertex3f(1, 0, 0)	
 	
 	
 	glEnd()
@@ -143,14 +142,14 @@ def assi():
 	glBegin(GL_LINES)
 	glColor3f(1, 0, 0)
 	glVertex3f(0,0,0)
-	glVertex3f(0, 200, 0)
+	glVertex3f(0, 1, 0)
 	glEnd()
 	
 	
 	glBegin(GL_LINES)
 	glColor3f(0, 0, 1)
 	glVertex3f(0,0,0)
-	glVertex3f(0, 0, 200)
+	glVertex3f(0, 0, 1)
 	glEnd()
 	
 
@@ -164,6 +163,10 @@ class GLWidget(QGLWidget):
 		self.xyRotation = 0.0
 		self.rotationAroundX = 0.0
 		self.zoom = 1.0
+		
+		self.eye = lib.Vectorial.Point3d([0, -20, 20])
+		self.target = lib.Vectorial.Point3d([0, -60, 0])	
+		
 	
 	def addXYrotation(self, v):
 		self.xyRotation = self.xyRotation + v
@@ -195,7 +198,7 @@ class GLWidget(QGLWidget):
 
 		
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
+		gluLookAt(self.eye.getX(), self.eye.getY(), self.eye.getZ(), self.target.getX(), self.target.getY(), self.target.getZ(), 0, 0, 1)
 	
 		glRotatef(self.xyRotation, 0, 0, 1)
 	
@@ -234,8 +237,9 @@ class GLWidget(QGLWidget):
 		
 		
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
-	
+		
+		gluLookAt(self.eye.getX(), self.eye.getY(), self.eye.getZ(), self.target.getX(), self.target.getY(), self.target.getZ(), 0, 0, 1)	
+		
 		glTranslatef(0, -60, 0)
 		glRotatef(self.xyRotation, 0, 0, 1)
 		glTranslatef(0, 60, 0)
@@ -254,7 +258,7 @@ class GLWidget(QGLWidget):
 		#glOrtho(0.0, self.width(), 0.0, self.height(), -1.0, 80)
 		#glFrustum(-30, 30, -30, 30, 20, 120)
 		glFrustum(-self.width()/2, self.width()/2, -self.height()/2, self.height()/2, 20, 800)
-		gluLookAt(0, -20, 20, 0, -60, 0, 0, 0, 1)
+		gluLookAt(self.eye.getX(), self.eye.getY(), self.eye.getZ(), self.target.getX(), self.target.getY(), self.target.getZ(), 0, 0, 1)
 		
 		
 		glRotatef(self.xyRotation, 0, 0, 1)
@@ -262,7 +266,16 @@ class GLWidget(QGLWidget):
 		
 		
 	#	glScalef(self.zoom, self.zoom, self.zoom)
+	
+	def straightAheadCamera(self, step=1):
+		direction = (self.target - self.eye).normalize()
+		translation = direction.scalarPerVector(step)
+				
+		self.target = lib.Vectorial.Point3d((self.target.to3dVector() + translation))
+		self.eye = lib.Vectorial.Point3d((self.eye.to3dVector() + translation))
 		
+		#print self.target
+		#print self.eye
 
 
 class Window(QWidget):
@@ -302,19 +315,21 @@ class Window(QWidget):
 		elif e.key() == QtCore.Qt.Key_Right:
 			print "Right"
 		elif e.key() == QtCore.Qt.Key_Up:
-			print "Up"
+			self.glWidget.straightAheadCamera(+1)
+			self.glWidget.glDraw()
 		elif e.key() == QtCore.Qt.Key_Down:
-			print "Down"
+			self.glWidget.straightAheadCamera(-1)
+			self.glWidget.glDraw()
 	def mousePressEvent(self, e):
 		"""
 		LeftButton
 		MiddleButton
 		
 		"""
-		print e.x(), " ", e.y()
+		#print e.x(), " ", e.y()
 		e.ignore()
 	def mouseMoveEvent(self, e):
-		print e.x(), " ", e.y()
+		#print e.x(), " ", e.y()
 		
 		self.glWidget.addXYrotation(e.x() - self.previousX)
 		self.glWidget.glDraw()
@@ -323,7 +338,7 @@ class Window(QWidget):
 		
 		e.ignore()
 	def mouseReleaseEvent(self, e):
-		print e.x(), " ", e.y()
+		#print e.x(), " ", e.y()
 		e.ignore()
 	def wheelEvent(self, e):
 		self.glWidget.addZoom(e.delta())

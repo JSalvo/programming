@@ -26,6 +26,13 @@ class Point3d:
 			self.__v[i] = v[i]
 	def __getitem__(self, i):
 		return self.__v[i] / self.__v[3]
+	def getX(self):
+		return self.__v[0] / self.__v[3]
+	def getY(self):
+		return self.__v[1] / self.__v[3]
+	def getZ(self):
+		return self.__v[2] / self.__v[3]
+		
 	def __setitem__(self, i, val):
 		self.__v[i] = self.__v[i] * self.__v[3]
 	def __sub__(self, p2):
@@ -126,7 +133,8 @@ class Vector:
 	def scalarPerVector(self, s):
 		result = Vector(len(self))
 		for i in range(0, len(self)):
-			result[i] = result[i] * s
+			result[i] = self[i] * s
+		return result
 	# Return a copy of self object
 	def clone(self):
 		result = Vector(len(self), self)
@@ -135,7 +143,7 @@ class Vector:
 	def __repr__(self):
 		return self.__v.__repr__()
 	# Return a normalized version of self vector (unity lenght vector)
-	def __normalize__(self):		
+	def normalize(self):		
 		return self / self.length()		
 	# Return self vector' lenght 
 	def length(self):
@@ -152,10 +160,14 @@ class Vector3d(Vector):
 			result[1] = self[2] * v[0] - self[0] * v[2]
 			result[2] = self[0] * v[1] - self[1] * v[0]
 		return result
+	def toPoint3d(self):
+		return Point3d(self)	
 	def clone(self):
 		result = Vector3d(self)
 	
 		return result
+	def normalize(self):
+		return Vector3d(Vector.normalize(self))
 
 class MatrixIncompatibleDimension(Exception):
 	def __init__(self, column, row):
