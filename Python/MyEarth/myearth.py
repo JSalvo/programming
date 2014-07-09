@@ -128,6 +128,45 @@ def ico(resolution):
 		triangle([0, -1, 0], [1, 0, 0], [0,0,-1], resolution)
 
 
+def cube():
+	glBegin(GL_QUADS)
+	
+	glVertex3f(0, 0, 0)
+	glVertex3f(1, 0, 0)
+	glVertex3f(1, 1, 0)
+	glVertex3f(0, 1, 0)
+	
+	glVertex3f(0, 0, 0)
+	glVertex3f(1, 0, 0)
+	glVertex3f(1, 0, 1)
+	glVertex3f(0, 0, 1)
+	
+	glVertex3f(1, 0, 0)
+	glVertex3f(1, 1, 0)
+	glVertex3f(1, 1, 1)
+	glVertex3f(1, 0, 1)
+	
+	glVertex3f(1, 1, 0)
+	glVertex3f(0, 1, 0)
+	glVertex3f(0, 1, 1)
+	glVertex3f(1, 1, 1)
+	
+	glVertex3f(0, 1, 0)
+	glVertex3f(0, 0, 0)
+	glVertex3f(0, 0, 1)
+	glVertex3f(0, 1, 1)
+
+	glVertex3f(0, 0, 1)
+	glVertex3f(1, 0, 1)
+	glVertex3f(1, 1, 1)
+	glVertex3f(0, 1, 1)
+	
+	
+	
+	
+	
+	glEnd()
+
 def assi():
 	glBegin(GL_LINES)
 	
@@ -164,7 +203,7 @@ class GLWidget(QGLWidget):
 		self.rotationAroundX = 0.0
 		self.zoom = 1.0
 		
-		self.eye = lib.Vectorial.Point3d([0, -20, 20])
+		self.eye = lib.Vectorial.Point3d([-20, -20, 20])
 		self.target = lib.Vectorial.Point3d([0, -60, 0])	
 		
 	
@@ -212,6 +251,11 @@ class GLWidget(QGLWidget):
 		glMatrixMode(GL_MODELVIEW)
 		glLoadIdentity()
 		
+		glPushMatrix()
+		glScalef(50, 50, 50)
+		assi()
+		glPopMatrix()
+		
 		
 		glTranslatef(0, -60, 0)
 		glScalef(50, 50, 50)
@@ -219,8 +263,8 @@ class GLWidget(QGLWidget):
 		
 		
 		#ico(0)
-		assi()
-		
+		#assi()
+		cube()
 		
 		
 		"""
@@ -276,6 +320,8 @@ class GLWidget(QGLWidget):
 		
 		#print self.target
 		#print self.eye
+	def rotateCamera(self, step=1):
+		pass
 
 
 class Window(QWidget):
