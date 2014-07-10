@@ -22,7 +22,7 @@ class Point3d:
 	def __init__(self, v=None):
 		self.__v = Vector(4)
 		self.__v[3] = 1.0
-		for i in range(0, 3):
+		for i in range(0, len(v)):
 			self.__v[i] = v[i]
 	def __getitem__(self, i):
 		return self.__v[i] / self.__v[3]
@@ -188,6 +188,22 @@ class Matrix():
 		
 	def column(self):
 		return self.__column
+	def getPoint3d(self):
+		if self.row() == 1:
+			if self.column() == 2:
+				return Point3d(self[0][0], self[0][1])
+			elif self.column() == 3:
+				return Point3d(self[0][0], self[0][1], self[0][2])
+			elif self.column() == 4:
+				return Point3d(self[0][0] / float(self[0][3], self[0][1] / float(self[0][3], self[0][2] / float(self[0][3])
+		elif self.column == 1:
+			if self.row() == 2:
+				return Point3d(self[0][0], self[1][0])
+			elif self.column() == 3:
+				return Point3d(self[0][0], self[1][0], self[2][0])
+			elif self.column() == 4:
+				return Point3d(self[0][0] / float(self[3][0]), self[1][0] / float(self[3][0]), self[2][0] / float(self[3][0]))
+		return None
 	
 	def __mul__(self, m):
 		result = Matrix(self.row(), m.column())
@@ -240,6 +256,8 @@ def get4x4Identity():
 	
 	return result
 
+# Post multiplication matrix transformation
+
 def get4x4RotationAroundX(angle):
 	angle = decimalToArc(angle)
 	
@@ -275,6 +293,14 @@ def get4x4RotationAroundZ(angle):
 	result[1][1] = +math.cos(angle)
 	
 	return result
+	
+def get4x4Translation(tx, ty, tz):
+	result = get4x4Identity()
+	
+	result[0][3] = tx
+	result[1][3] = ty
+	result[2][3] = tz
+	
 	
 
 
