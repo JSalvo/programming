@@ -328,25 +328,18 @@ class Camera():
 		self.__eye = eye
 		self.__target = target
 		self.__up = up
-	# Camera rotation around z-axis passing through target point
 	def rotationAroundTarget(self, a):
 		pass
-	# Camera rotation over target poitn
 	def rotationOverTarget(self, a):
 		pass
-	# Camera eye' rotation
 	def eyeRotation(self, a):
 		pass
-	# Move camera forward
 	def cameraForward(self, s):
 		pass
-	# Move camera backward
 	def cameraBackward(self, s):
 		pass
-	# Move camera left
 	def cameraLeft(self, s):
 		pass
-	# Move camera right
 	def cameraRight(self, s):
 		pass
 		
