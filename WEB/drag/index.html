@@ -1,0 +1,487 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Grammatica per Bambini</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="style.css" />
+    
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+    
+<script>
+    
+
+    
+$(document).ready(function(){
+    $( ".draggable" ).draggable();
+        
+    //DIV CONSEGNA//  
+    $("#consegna").click(function(){
+        $("#consegna").animate({left: '-768px'});
+    });
+     $("#buttonConsegna").click(function(){
+        $("#consegna").animate({left: '30px'});
+    });
+    
+    
+    //BOTTONE RICARICA MENU//
+    $("#buttonRicarica").click(function(){
+        location.reload(true);
+    });
+    //AUDIO SCRITTE//
+    var audioAlice = document.createElement('audio');
+    audioAlice.setAttribute('src', 'sound/alice.mp3');
+    
+    var audioBambini = document.createElement('audio');
+    audioBambini.setAttribute('src', 'sound/Bambini.mp3');
+    
+    var audioCavallino = document.createElement('audio');
+    audioCavallino.setAttribute('src', 'sound/Cavallino.mp3');
+    
+    var audioDamiano = document.createElement('audio');
+    audioDamiano.setAttribute('src', 'sound/Damiano.mp3');
+    
+    var audioErnesto = document.createElement('audio');
+    audioErnesto.setAttribute('src', 'sound/Ernesto.mp3');
+    
+    var audioFrancesco = document.createElement('audio');
+    audioFrancesco.setAttribute('src', 'sound/Francesco.mp3');
+    
+    var audioGiulia = document.createElement('audio');
+    audioGiulia.setAttribute('src', 'sound/Giulia.mp3');
+    
+    var audioHrptcl = document.createElement('audio');
+    audioHrptcl.setAttribute('src', 'sound/Hprtcl.mp3');
+    
+    var audioIsola = document.createElement('audio');
+    audioIsola.setAttribute('src', 'sound/Isola.mp3');
+    
+    var audioLeone = document.createElement('audio');
+    audioLeone.setAttribute('src', 'sound/Leone.mp3');
+    
+    var audioMostro = document.createElement('audio');
+    audioMostro.setAttribute('src', 'sound/Mostro.mp3');
+    
+    var audioNani = document.createElement('audio');
+    audioNani.setAttribute('src', 'sound/Nani.mp3');
+    
+    var audioOcchiosolo = document.createElement('audio');
+    audioOcchiosolo.setAttribute('src', 'sound/Occchiosolo.mp3');
+    
+    var audioPrincipe = document.createElement('audio');
+    audioPrincipe.setAttribute('src', 'sound/Principe.mp3');
+    
+    var audioQuickl = document.createElement('audio');
+    audioQuickl.setAttribute('src', 'sound/Quikl.mp3');
+    
+    var audioRedeisogni = document.createElement('audio');
+    audioRedeisogni.setAttribute('src', 'sound/Redeisogni.mp3');
+    
+    var audioStrega = document.createElement('audio');
+    audioStrega.setAttribute('src', 'sound/Strega.mp3');
+    
+    var audioTartaruga = document.createElement('audio');
+    audioTartaruga.setAttribute('src', 'sound/Tartaruga.mp3');
+    
+    var audioUgo = document.createElement('audio');
+    audioUgo.setAttribute('src', 'sound/Ugo.mp3');
+    
+    var audioViola = document.createElement('audio');
+    audioViola.setAttribute('src', 'sound/Viola.mp3');
+    
+    var audioZiodigiulia = document.createElement('audio');
+    audioZiodigiulia.setAttribute('src', 'sound/Ziadigiulia.mp3');
+    
+    $("#aliceScritta").click(function(){
+        audioAlice.play();
+        });
+    $("#bambiniScritta").click(function(){
+        audioBambini.play();
+        });
+    $("#cavallinoScritta").click(function(){
+        audioCavallino.play();
+        });
+    $("#damianoScritta").click(function(){
+        audioDamiano.play();
+        });
+    $("#ernestoScritta").click(function(){
+        audioErnesto.play();
+        });
+    $("#francescoScritta").click(function(){
+        audioFrancesco.play();
+        });
+    $("#giuliaScritta").click(function(){
+        audioGiulia.play();
+        });
+    $("#hrptclScritta").click(function(){
+        audioHrptcl.play();
+        });
+    $("#isolaScritta").click(function(){
+        audioIsola.play();
+        });
+    $("#leoneScritta").click(function(){
+        audioLeone.play();
+        });
+    $("#mostroScritta").click(function(){
+        audioMostro.play();
+        });
+    $("#naniScritta").click(function(){
+        audioNani.play();
+        });
+    $("#occhiosoloScritta").click(function(){
+        audioOcchiosolo.play();
+        });
+    $("#principeScritta").click(function(){
+        audioPrincipe.play();
+        });
+    $("#quikclScritta").click(function(){
+        audioQuickl.play();
+        });
+    $("#redeisogniScritta").click(function(){
+        audioRedeisogni.play();
+        });
+    $("#stregaScritta").click(function(){
+        audioStrega.play();
+        });
+    $("#tartarugaScritta").click(function(){
+        audioTartaruga.play();
+        });
+    $("#ugoScritta").click(function(){
+        audioUgo.play();
+        });
+    $("#violaScritta").click(function(){
+        audioViola.play();
+        });
+    $("#ziodigiuliaScritta").click(function(){
+        audioZiodigiulia.play();
+        });
+    
+    //CONTROLLO POSIZIONI//
+    //RICAVO POSIZIONI LETTERA DISEGNINO//
+    $("#buttonControllo").click(function(){
+	var alfabetoMaiuscolo = "ABCDEFGHILMNOPQRSTUVZ";
+	var alfabetoMinuscolo = "abcdefghilmnopqrstuvz";
+	
+	for (i=0; i<21; i++)
+	{
+		var og = $("#"+alfabetoMinuscolo[i]).offset();
+		var r1 = $("#divRisposte"+alfabetoMaiuscolo[i]).offset();
+		
+		if (i != 20)
+		{
+			var r2 = $("#divRisposte"+alfabetoMaiuscolo[i+1]).offset();
+		
+		
+			if ((og.top>=r1.top) && (og.top<=r2.top))
+				$("#divFaccineRisposte"+alfabetoMaiuscolo[i]).animate({opacity: '1'});
+		}
+		else
+		{
+			if (og.top>=r1.top)
+				$("#divFaccineRisposte"+alfabetoMaiuscolo[i]).animate({opacity: '1'});
+				
+		}
+        }
+		
+
+	
+
+	/*
+    var a = $("#a").offset();
+    var b = $("#b").offset();
+    var c = $("#c").offset();
+    var d = $("#d").offset();
+    var e = $("#e").offset();
+    var f = $("#f").offset();
+    var g = $("#g").offset();
+    var h = $("#h").offset();
+    var i = $("#i").offset();
+    var l = $("#l").offset();
+    var m = $("#m").offset();
+    var n = $("#n").offset();
+    var o = $("#o").offset();
+    var p = $("#p").offset();
+    var q = $("#q").offset();
+    var r = $("#r").offset();
+    var s = $("#s").offset();
+    var t = $("#t").offset();
+    var u = $("#u").offset();
+    var v = $("#v").offset();
+    var z = $("#z").offset(); 
+      
+    //RICAVO POSIZIONI DIV RISPOSTE//
+    var ar = $("#divRisposteA").offset();
+    var br = $("#divRisposteB").offset();
+    var cr = $("#divRisposteC").offset();
+    var dr = $("#divRisposteD").offset();
+    var er = $("#divRisposteE").offset();
+    var fr = $("#divRisposteF").offset();
+    var gr = $("#divRisposteG").offset();
+    var hr = $("#divRisposteH").offset();
+    var ir = $("#divRisposteI").offset();
+    var lr = $("#divRisposteL").offset();
+    var mr = $("#divRisposteM").offset();
+    var nr = $("#divRisposteN").offset();
+    var or = $("#divRisposteO").offset();
+    var pr = $("#divRisposteP").offset();
+    var qr = $("#divRisposteQ").offset();
+    var rr = $("#divRisposteR").offset();
+    var sr = $("#divRisposteS").offset();
+    var tr = $("#divRisposteT").offset();
+    var ur = $("#divRisposteU").offset();
+    var vr = $("#divRisposteV").offset();
+    var zr = $("#divRisposteZ").offset();
+        
+        
+      if ((a.top>=ar.top) && (a.top<=br.top)){
+          $("#divFaccineRisposteA").animate({opacity: '1'});
+        }
+        if ((b.top>=br.top) && (b.top<=cr.top)){
+          $("#divFaccineRisposteB").animate({opacity: '1'});
+        }
+        if ((c.top>=cr.top) && (c.top<=dr.top)){
+          $("#divFaccineRisposteC").animate({opacity: '1'});
+        }
+        if ((d.top>=dr.top) && (d.top<=er.top)){
+          $("#divFaccineRisposteD").animate({opacity: '1'});
+        }
+        if ((e.top>=er.top) && (e.top<=fr.top)){
+          $("#divFaccineRisposteE").animate({opacity: '1'});
+        }
+        if ((f.top>=fr.top) && (f.top<=gr.top)){
+          $("#divFaccineRisposteF").animate({opacity: '1'});
+        }
+        if ((g.top>=gr.top) && (g.top<=hr.top)){
+          $("#divFaccineRisposteG").animate({opacity: '1'});
+        }
+        if ((h.top>=hr.top) && (h.top<=ir.top)){
+          $("#divFaccineRisposteH").animate({opacity: '1'});
+        }
+        if ((i.top>=ir.top) && (i.top<=lr.top)){
+          $("#divFaccineRisposteI").animate({opacity: '1'});
+        }
+        if ((l.top>=lr.top) && (l.top<=mr.top)){
+          $("#divFaccineRisposteL").animate({opacity: '1'});
+        }
+        if ((m.top>=mr.top) && (m.top<=nr.top)){
+          $("#divFaccineRisposteM").animate({opacity: '1'});
+        }
+        if ((n.top>=nr.top) && (n.top<=or.top)){
+          $("#divFaccineRisposteN").animate({opacity: '1'});
+        }
+        if ((o.top>=or.top) && (o.top<=pr.top)){
+          $("#divFaccineRisposteO").animate({opacity: '1'});
+        }
+        if ((p.top>=pr.top) && (p.top<=qr.top)){
+          $("#divFaccineRisposteP").animate({opacity: '1'});
+        }
+        if ((q.top>=qr.top) && (q.top<=rr.top)){
+          $("#divFaccineRisposteQ").animate({opacity: '1'});
+        }
+        if ((r.top>=rr.top) && (r.top<=sr.top)){
+          $("#divFaccineRisposteR").animate({opacity: '1'});
+        }
+        if ((s.top>=sr.top) && (s.top<=tr.top)){
+          $("#divFaccineRisposteS").animate({opacity: '1'});
+        }
+        if ((t.top>=tr.top) && (t.top<=ur.top)){
+          $("#divFaccineRisposteT").animate({opacity: '1'});
+        }
+        if ((u.top>=ur.top) && (u.top<=vr.top)){
+          $("#divFaccineRisposteU").animate({opacity: '1'});
+        }
+        if ((v.top>=vr.top) && (v.top<=zr.top)){
+          $("#divFaccineRisposteV").animate({opacity: '1'});
+        }
+        if (z.top>=zr.top) {
+          $("#divFaccineRisposteZ").animate({opacity: '1'});
+        }*/
+        
+        
+        
+         
+       /* if (a.top<=60){
+            alert("a");
+        }
+       alert ("a: "+a.top);
+       alert ("b: "+b.top);
+       alert ("c: "+c.top);
+       alert ("d: "+d.top);
+       alert ("e: "+e.top);
+       alert ("f: "+f.top);
+       alert ("g: "+g.top);
+       alert ("h: "+h.top);
+       alert ("i: "+i.top);
+       alert ("l: "+l.top);
+       alert ("m: "+m.top);
+       alert ("n: "+n.top);
+       alert ("o: "+o.top);
+       alert ("p: "+p.top);
+       alert ("q: "+q.top);
+       alert ("r: "+r.top);
+       alert ("s: "+s.top);
+       alert ("t: "+t.top);
+       alert ("u: "+u.top);
+       alert ("v: "+v.top);
+       alert ("z: "+z.top); */
+        
+    });
+});   
+   
+
+    
+   
+    
+ 
+</script>
+    
+    
+</head>
+<body>
+
+<audio id="aliceSound" src="sound/alice.mp3"></audio>    
+    
+    
+    
+<div id="consegna">
+    Ci sono tanti personaggi in questa pagina<br> come le lettere dell'<b>alfabeto.<br>Tocca le scritte a sinistrae ascolta la pronuncia.<br>Metti nella tabella i disegni,<br>poi associa la parola giusta.</b><span>INIZIA</span>
+    
+    </div>
+
+<div id="content">
+ 
+    
+    <!-- MENU -->
+<div id="navBar">
+<ul>
+    <li id="buttonConsegna">Consegna</li>
+    <li id="buttonControllo">Controllo</li>
+    <li id="buttonRicarica">Ricarica</li>
+</ul>
+    
+    <!-- RIQUADRO CENTRALE -->
+</div>
+<div id="risposte">
+    <div id="divRisposteA"></div>
+    <div id="divRisposteB"></div>
+    <div id="divRisposteC"></div>
+    <div id="divRisposteD"></div>
+    <div id="divRisposteE"></div>
+    <div id="divRisposteF"></div>
+    <div id="divRisposteG"></div>
+    <div id="divRisposteH"></div>
+    <div id="divRisposteI"></div>
+    <div id="divRisposteL"></div>
+    <div id="divRisposteM"></div>
+    <div id="divRisposteN"></div>
+    <div id="divRisposteO"></div>
+    <div id="divRisposteP"></div>
+    <div id="divRisposteQ"></div>
+    <div id="divRisposteR"></div>
+    <div id="divRisposteS"></div>
+    <div id="divRisposteT"></div>
+    <div id="divRisposteU"></div>
+    <div id="divRisposteV"></div>
+    <div id="divRisposteZ"></div>
+    
+    
+</div>
+    
+    <!-- LISTA FACCINE -->
+<div id="faccine">
+    <div class="faccineDiv" id="divFaccineRisposteA"></div>
+    <div class="faccineDiv" id="divFaccineRisposteB"></div>
+    <div class="faccineDiv" id="divFaccineRisposteC"></div>
+    <div class="faccineDiv" id="divFaccineRisposteD"></div>
+    <div class="faccineDiv" id="divFaccineRisposteE"></div>
+    <div class="faccineDiv" id="divFaccineRisposteF"></div>
+    <div class="faccineDiv" id="divFaccineRisposteG"></div>
+    <div class="faccineDiv" id="divFaccineRisposteH"></div>
+    <div class="faccineDiv" id="divFaccineRisposteI"></div>
+    <div class="faccineDiv" id="divFaccineRisposteL"></div>
+    <div class="faccineDiv" id="divFaccineRisposteM"></div>
+    <div class="faccineDiv" id="divFaccineRisposteN"></div>
+    <div class="faccineDiv" id="divFaccineRisposteO"></div>
+    <div class="faccineDiv" id="divFaccineRisposteP"></div>
+    <div class="faccineDiv" id="divFaccineRisposteQ"></div>
+    <div class="faccineDiv" id="divFaccineRisposteR"></div>
+    <div class="faccineDiv" id="divFaccineRisposteS"></div>
+    <div class="faccineDiv" id="divFaccineRisposteT"></div>
+    <div class="faccineDiv" id="divFaccineRisposteU"></div>
+    <div class="faccineDiv" id="divFaccineRisposteV"></div>
+    <div class="faccineDiv" id="divFaccineRisposteZ"></div>
+    
+    
+</div>
+
+    <!-- LISTA DISEGNI SX -->
+<div id="img">
+<ul>
+  
+ 
+<li class="draggable" id="c"> <img src="img/C.gif"></li>
+<li class="draggable" id="d"> <img src="img/D.gif"></li>
+<li class="draggable" id="f"> <img src="img/F.gif"></li>      
+<li class="draggable" id="h"> <img src="img/H.gif"></li>
+<li class="draggable" id="b"> <img src="img/B.gif"></li>     
+<li class="draggable" id="l"> <img src="img/L.gif"></li>   
+<li class="draggable" id="n"> <img src="img/N.gif"></li>   
+<li class="draggable" id="o"> <img src="img/O.gif"></li> 
+<li class="draggable" id="g"> <img src="img/G.gif"></li>
+<li class="draggable" id="p"> <img src="img/P.gif"></li>      
+<li class="draggable" id="s"> <img src="img/S.gif"></li> 
+<li class="draggable" id="e"> <img src="img/E.gif"></li>
+<li class="draggable" id="q"> <img src="img/Q.gif"></li>
+<li class="draggable" id="t"> <img src="img/T.gif"></li>   
+<li class="draggable" id="u"> <img src="img/U.gif"></li> 
+<li class="draggable" id="i"> <img src="img/I.gif"></li>
+<li class="draggable" id="v"> <img src="img/V.gif"></li>
+<li class="draggable" id="m"> <img src="img/M.gif"></li>   
+<li class="draggable" id="z"> <img src="img/Z.gif"></li> 
+<li class="draggable" id="r"> <img src="img/R.gif"></li>   
+<li class="draggable" id="a"> <img src="img/A.gif"></li>   
+
+</ul>
+</div>
+
+
+    
+
+    
+    
+<!-- LISTA SCRITTE DX --> 
+<div id="scritte">
+<ul>
+<li class="draggable" id="aliceScritta">Alice</li>      
+<li class="draggable" id="cavallinoScritta">Cavallino</li>
+<li class="draggable" id="ernestoScritta">Ernesto</li>
+<li class="draggable" id="damianoScritta">Damiano</li>      
+<li class="draggable" id="francescoScritta">Francesco</li>   
+<li class="draggable" id="bambiniScritta">Bambini </li>   
+<li class="draggable" id="hrptclScritta">Hrptcl</li>      
+<li class="draggable" id="giuliaScritta">Giulia</li>
+<li class="draggable" id="leoneScritta">Leone</li>     
+<li class="draggable" id="naniScritta">Nani</li>     
+<li class="draggable" id="principeScritta">Principe</li>
+<li class="draggable" id="mostroScritta">Mostro</li> 
+<li class="draggable" id="quikclScritta">Quikcl </li>  
+<li class="draggable" id="occhiosoloScritta">Occhiosolo</li>    
+<li class="draggable" id="stregaScritta">Strega</li>   
+<li class="draggable" id="redeisogniScritta">Redeisogni</li>
+<li class="draggable" id="ugoScritta">Ugo</li> 
+<li class="draggable" id="tartarugaScritta">Tartaruga</li>
+<li class="draggable" id="isolaScritta">Isola</li>
+<li class="draggable" id="ziodigiuliaScritta">Ziodigiulia</li>
+<li class="draggable" id="violaScritta">Viola</li> 
+</ul> 
+</div>
+    
+    
+</div>   
+
+</body>
+</html>

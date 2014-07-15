@@ -328,18 +328,29 @@ class Camera():
 		self.__eye = eye
 		self.__target = target
 		self.__up = up
+	# Camera rotation around z-axis passing through target point
 	def rotationAroundTarget(self, a):
-		pass
+		m1 = lib.Vectorial.get4x4Translation(-self.__eye[0], -self.__eye[1], -self.__eye[2])
+		m2 = lib.Vectorial.get4x4RotationAroundZ(a)
+		m3 = lib.Vectorial.get4x4Translation(+self.__eye[0], +self.__eye[1], +self.__eye[2])
+		
+		self.__eye = Point3d(self.__eye.to1x4Matrix()*m1*m2*m3)
+	# Camera rotation over target poitn
 	def rotationOverTarget(self, a):
 		pass
+	# Camera eye' rotation
 	def eyeRotation(self, a):
 		pass
+	# Move camera forward
 	def cameraForward(self, s):
 		pass
+	# Move camera backward
 	def cameraBackward(self, s):
 		pass
+	# Move camera left
 	def cameraLeft(self, s):
 		pass
+	# Move camera right
 	def cameraRight(self, s):
 		pass
 		
